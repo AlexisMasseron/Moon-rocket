@@ -8,20 +8,18 @@ public class CharacBehavior : MonoBehaviour
 
     public float runSpeed;
 
-    public int maxJump;
+    public float maxJump;
 
     private bool facingRight = true;
 
     private bool isGrounded = false;
 
 
-    // Update is called once per frame
     void Update()
     {
         //Player Movement. Check for horizontal movement
         if (Input.GetAxisRaw ("Horizontal") > 0.5f || Input.GetAxisRaw("Horizontal") < -0.5f) 
         {
-            transform.Translate (new Vector3 (Input.GetAxisRaw ("Horizontal") * runSpeed * Time.deltaTime, 0f, 0f));
             if (Input.GetAxisRaw ("Horizontal") > 0.5f && !facingRight) 
             {
                 //If we're moving right but not facing right, flip the sprite and set facingRight to true.
@@ -33,6 +31,7 @@ public class CharacBehavior : MonoBehaviour
                 Flip ();
                 facingRight = false;
             }
+            retrieveInput();
         }
 
         //Player Movement. Check for jumping
@@ -40,21 +39,31 @@ public class CharacBehavior : MonoBehaviour
             Jump();
             isGrounded = false;
         }
+
+        Debug.Log(isGrounded);
+    }
+
+    void retrieveInput() {
+        float xInput = Input.GetAxis("Horizontal");
+        float xForce = xInput * runSpeed * Time.deltaTime;
+        Vector2 force = new Vector2(xForce, 0f);
+        rb.velocity += force;
     }
 
     void Flip()
     {
-        // Switch the way the player is labelled as facing
+        // Switch the way the player is labelled as facing        
         facingRight = !facingRight;
-
-        // Multiply the player's x local scale by -1
+        // Flip the player's x local scale by multpliying it by -1
         Vector3 theScale = transform.localScale;
         theScale.x *= -1;
         transform.localScale = theScale;
     }
+
     void Jump() 
     { 
-        rb.velocity += new Vector2(0, maxJump);
+        Vector2 jumpForce = new Vector2(0f, maxJump);
+        rb.velocity += jumpForce;
     }
 
     // Unity native functions that are automatically triggered when the character will collide an object or not
