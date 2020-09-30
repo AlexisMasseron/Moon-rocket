@@ -15,7 +15,7 @@ public class CharacBehavior : MonoBehaviour
     private bool isGrounded = false;
 
 
-    void Update()
+    void FixedUpdate()
     {
         //Player Movement. Check for horizontal movement
         if (Input.GetAxisRaw ("Horizontal") > 0.5f || Input.GetAxisRaw("Horizontal") < -0.5f) 
@@ -39,8 +39,6 @@ public class CharacBehavior : MonoBehaviour
             Jump();
             isGrounded = false;
         }
-
-        Debug.Log(isGrounded);
     }
 
     void retrieveInput() {
